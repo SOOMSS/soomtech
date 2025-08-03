@@ -95,8 +95,8 @@ if "page" not in st.session_state:
 # 사이드바 메뉴
 menu_map = {
     "홈": "🏠 홈",
-    "정투상법": "🧱 정투상법",
-    "일반모드": "🏙️ 일반모드",
+    "Minecraft Education": "🧱 Minecraft Education",
+    "검색모드": "🏙️ 검색모드",
     "설계사무실": "🏛️ 설계사무실",
     "블록코딩": "💻 블록코딩"
 }
@@ -139,8 +139,8 @@ if st.session_state.page == "홈":
         st.markdown("""
     <div class="menu-card">
         <div class="menu-icon">📐</div>
-        <h3>정투상법</h3>
-        <p>도면 기반 입체도형 추론</p>
+        <h3>Minecraft Education</h3>
+        <p>작동법 익히기</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -148,7 +148,7 @@ if st.session_state.page == "홈":
         st.markdown("""
     <div class="menu-card">
         <div class="menu-icon">🗺️</div>
-        <h3>일반모드</h3>
+        <h3>검색모드</h3>
         <p>국가/도시별 건축 정보</p>
     </div>
     """, unsafe_allow_html=True)
@@ -167,17 +167,71 @@ if st.session_state.page == "홈":
     <div class="menu-card">
         <div class="menu-icon">💻</div>
         <h3>블록코딩</h3>
-        <p>Minecraft 연동 코딩</p>
+        <p>Minecraft 좌표 코딩</p>
     </div>
     """, unsafe_allow_html=True)
 
 
-# 각 페이지
-elif st.session_state.page == "정투상법":
-    st.subheader("🧱 정투상법 퀴즈")
-    st.image("https://github.com/SOOMSS/minecraft_picture/blob/main/IMG_8942.jpg?raw=true", caption="정면도 예시", width=300)
+elif st.session_state.page == "Minecraft Education":
+    st.subheader("🧱 Minecraft Education: 정면/평면 설계 실습")
+    st.markdown("아래 WebSim 시뮬레이터에서 도면을 기반으로 블록을 조합하여 건축 설계를 해보세요.")
 
-elif st.session_state.page == "일반모드":
+    # WebSim URL 삽입
+    websim_url = "https://websim.com/@JiQuad/eaglercraft-minecraft"  # 실제 프로젝트 주소로 대체
+    import streamlit.components.v1 as components
+    components.iframe(websim_url, height=650, width=1050, scrolling=True)
+
+    # 사용자 설계 요약 입력
+    st.markdown("### 📝 설계 설명 작성")
+    summary = st.text_area("설계의 의도, 사용 블록, 층수 등을 자유롭게 설명해보세요.")
+
+    if st.button("설계 요약 저장"):
+        if "edu_design_notes" not in st.session_state:
+            st.session_state.edu_design_notes = []
+        st.session_state.edu_design_notes.append(summary)
+        st.success("📝 설계 설명이 저장되었습니다!")
+
+    if st.session_state.get("edu_design_notes"):
+        st.markdown("### 📂 저장된 설계 설명 목록")
+        for i, note in enumerate(st.session_state.edu_design_notes[::-1], 1):
+            st.markdown(f"**{i}.** {note}")
+
+
+elif st.session_state.page == "검색모드":
+    st.markdown("### 🌏 주요 국가별 건축양식 요약")
+    with st.expander("🔍 클릭하여 대표 건축양식과 랜드마크 정보를 확인하세요"):
+        col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("#### 🇯🇵 일본")
+        st.markdown("""
+        - **양식**: 전통 목조건축, 기와지붕, 미니멀리즘
+        - **랜드마크**: 기요미즈데라, 금각사
+        - **특징**: 자연과의 조화를 중시하며, 단순하고 조용한 느낌을 강조
+        """)
+
+        st.markdown("#### 🇫🇷 프랑스")
+        st.markdown("""
+        - **양식**: 고딕, 르네상스, 바로크, 현대 유리건축
+        - **랜드마크**: 에펠탑, 루브르박물관
+        - **특징**: 장식적인 디테일과 예술성이 돋보임
+        """)
+
+    with col2:
+        st.markdown("#### 🇮🇹 이탈리아")
+        st.markdown("""
+        - **양식**: 로마네스크, 르네상스, 바로크
+        - **랜드마크**: 콜로세움, 두오모 성당
+        - **특징**: 고대 로마 유산과 화려한 돔 구조가 강점
+        """)
+
+        st.markdown("#### 🇺🇸 미국")
+        st.markdown("""
+        - **양식**: 현대 건축, 마천루, 산업적 기능주의
+        - **랜드마크**: 엠파이어 스테이트 빌딩, 백악관
+        - **특징**: 대규모 구조와 첨단 기술 중심
+        """)
+
     st.subheader("🏙️ 일반모드: 도시 정보 탐색")
     name = st.text_input("이름을 적어주세요.(별명도 좋아요)")
     country = st.selectbox("국가 선택", ["일본", "프랑스", "이탈리아", "미국"])
@@ -270,10 +324,91 @@ player.onChat("{latest_design['건축물'].lower()}", function () {{
         st.code(code, language="typescript")
         st.info(f"🧱 위 코드를 Minecraft Education의 MakeCode에 붙여넣으면 '{latest_design['건축물'].lower()}' 명령어로 {latest_design['건축물']}이 생성됩니다!")
 
+# 블록코딩 페이지
+
 
 elif st.session_state.page == "블록코딩":
     st.subheader("💻 블록코딩")
-    st.markdown("MakeCode를 활용하여 Minecraft에서 작동하는 건축 코드 생성기를 개발 중입니다.")
+    st.markdown("Minecraft에서 자주 혼동되는 **절대좌표와 상대좌표**를 이해하고, 자동으로 계산해보세요!")
+
+    # 📘 설명 영역
+    with st.expander("📘 절대좌표와 상대좌표 개념 설명"):
+        st.markdown("""
+        - **절대좌표**는 마인크래프트 월드의 고정된 위치입니다. 예: `pos(10, 5, -3)`
+        - **상대좌표**는 플레이어나 특정 블록을 기준으로 얼마나 떨어져 있는지를 나타냅니다. 예: `~3 ~1 ~-2`
+        - `~`는 현재 위치 기준으로 좌표를 지정할 수 있게 해주며, 예를 들어 `~1`은 현재 위치에서 +1을 의미합니다.
+
+        예: 플레이어 위치가 (5, 4, 7)이고 목표 위치가 (8, 6, 10)이라면 상대좌표는 `~3 ~2 ~3`입니다.
+        """)
+
+    # 🧮 입력
+    st.header("🧮 좌표 입력 및 계산")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("📍 현재 위치 (절대좌표)")
+        cx = st.number_input("현재 X", value=0, key="cx")
+        cy = st.number_input("현재 Y", value=0, key="cy")
+        cz = st.number_input("현재 Z", value=0, key="cz")
+
+    with col2:
+        st.subheader("🎯 목표 위치 (절대좌표)")
+        tx = st.number_input("목표 X", value=5, key="tx")
+        ty = st.number_input("목표 Y", value=5, key="ty")
+        tz = st.number_input("목표 Z", value=5, key="tz")
+
+    # 상대좌표 계산
+    dx, dy, dz = tx - cx, ty - cy, tz - cz
+
+    st.markdown("### ✅ 계산된 상대좌표")
+    st.code(f"~{dx} ~{dy} ~{dz}", language="text")
+
+    # 명령어 예시 생성
+    st.markdown("### 🧱 명령어 예시")
+    chat_command = st.text_input("명령어 이름 입력 (예: move)", value="move")
+    st.code(f"""
+player.onChat("{chat_command}", function () {{
+    player.move(~{dx}, ~{dy}, ~{dz})
+}})
+    """, language="typescript")
+
+    # 📊 시각화
+    st.header("📊 좌표 시각화 (3D)")
+    import plotly.graph_objects as go
+    fig = go.Figure()
+    fig.add_trace(go.Scatter3d(
+        x=[cx], y=[cy], z=[cz],
+        mode='markers+text',
+        marker=dict(size=5, color='blue'),
+        name='현재 위치',
+        text=["현재 위치"], textposition="top center"
+    ))
+    fig.add_trace(go.Scatter3d(
+        x=[tx], y=[ty], z=[tz],
+        mode='markers+text',
+        marker=dict(size=5, color='red'),
+        name='목표 위치',
+        text=["목표 위치"], textposition="top center"
+    ))
+    fig.add_trace(go.Scatter3d(
+        x=[cx, tx], y=[cy, ty], z=[cz, tz],
+        mode='lines', line=dict(color='green', width=4), name='이동 벡터'
+    ))
+    fig.update_layout(
+        margin=dict(l=0, r=0, b=0, t=0),
+        scene=dict(
+            xaxis_title='X',
+            yaxis_title='Y',
+            zaxis_title='Z'
+        ),
+        height=500
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.success("⬆️ 위 그래프에서 현재 위치와 목표 위치, 이동 방향을 3D로 확인할 수 있습니다!")
+
+    # 🎁 추가 예시
+    st.markdown("### 🔧 blocks.fill 예시")
     st.code("""
 player.onChat("tower", function () {
     blocks.fill(
