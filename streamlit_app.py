@@ -173,7 +173,7 @@ if st.session_state.page == "홈":
 
 
 elif st.session_state.page == "Minecraft Education":
-    st.subheader("🧱 Minecraft Education: 정면/평면 설계 실습")
+    st.subheader("🧱 Minecraft Education: 작동실습")
     st.markdown("아래 WebSim 시뮬레이터에서 도면을 기반으로 블록을 조합하여 건축 설계를 해보세요.")
 
     # WebSim URL 삽입
@@ -232,7 +232,7 @@ elif st.session_state.page == "검색모드":
         - **특징**: 대규모 구조와 첨단 기술 중심
         """)
 
-    st.subheader("🏙️ 일반모드: 도시 정보 탐색")
+    st.subheader("🏙️ 검색모드: 도시 정보 탐색")
     name = st.text_input("이름을 적어주세요.(별명도 좋아요)")
     country = st.selectbox("국가 선택", ["일본", "프랑스", "이탈리아", "미국"])
     city = st.text_input("도시를 입력하세요 (예: 교토, 파리, 로마)")
@@ -249,8 +249,8 @@ elif st.session_state.page == "검색모드":
                 1. 건축양식 특징
                 2. 기후 특징
                 3. 유명한 건축 랜드마크
-                알려줄때는 이름 : {name}님 작성한 내용을 토대로 알려드리겠습니다. 라고 한 뒤에 알려줘.
-                이 내용을 바탕으로 minecraft education에서 어떤 건축물을 지으면 좋을지 자세하게 추천해줘.
+                알려줄때는 {name}님 작성한 내용을 토대로 알려드리겠습니다. 라고 한 뒤에 알려줘.
+                이 내용을 바탕으로 minecraft education에서 어떤 건축물을 어떤 재료를 이용해서 지으면 좋을지, 어떤 모양으로 지으면 좋을지 자세하게 추천해줘.
                 또한, 해당 건축물과 관련있는 유튜브 영상을 링크로 추천해줘
                 """
                 response = client.chat.completions.create(
